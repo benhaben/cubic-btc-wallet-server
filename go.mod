@@ -1,4 +1,4 @@
-module github.com/benhaben/cubic-btc-wallet-server
+module github.com/CubicGames/cubic-btc-wallet-server
 
 go 1.21
 
@@ -12,8 +12,12 @@ require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/spf13/viper v1.18.2
 	github.com/stretchr/testify v1.8.4
+	github.com/tyler-smith/go-bip32 v1.0.0
+	github.com/tyler-smith/go-bip39 v1.1.0
+	go.dedis.ch/kyber/v3 v3.1.0
 	go.uber.org/zap v1.26.0
 	golang.org/x/crypto v0.18.0
+	github.com/ethereum/go-ethereum v1.13.4
 	gorm.io/driver/postgres v1.5.4
 	gorm.io/gorm v1.25.5
 )
