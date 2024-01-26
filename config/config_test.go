@@ -1,10 +1,10 @@
 package config_test
 
 import (
+	"github.com/CubicGames/cubic-btc-wallet-server/config"
 	"os"
 	"testing"
 
-	"github.com/b2network/b2-indexer/internal/config"
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/stretchr/testify/require"
 )

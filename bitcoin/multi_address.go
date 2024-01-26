@@ -2,8 +2,8 @@ package bitcoin
 
 import (
 	"encoding/hex"
-	"github.com/CubicGames/cubic-btc-wallet-server/crypto/base58"
-	"github.com/CubicGames/cubic-btc-wallet-server/util"
+	"github.com/CubicGames/cubic-btc-wallet-server/bitcoin/crypto/base58"
+	"github.com/CubicGames/cubic-btc-wallet-server/bitcoin/util"
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/txscript"

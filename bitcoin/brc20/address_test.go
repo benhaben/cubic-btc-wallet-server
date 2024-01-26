@@ -3,7 +3,7 @@ package brc20
 import (
 	"encoding/hex"
 	"fmt"
-	"github.com/CubicGames/cubic-btc-wallet-server/util"
+	"github.com/CubicGames/cubic-btc-wallet-server/bitcoin/util"
 	"github.com/btcsuite/btcd/btcec/v2"
 	"github.com/btcsuite/btcd/btcec/v2/schnorr"
 	"github.com/btcsuite/btcd/btcutil"

@@ -5,7 +5,7 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"fmt"
-	"github.com/CubicGames/cubic-btc-wallet-server/util"
+	util2 "github.com/CubicGames/cubic-btc-wallet-server/bitcoin/util"
 	"github.com/btcsuite/btcd/btcec/v2"
 	"github.com/btcsuite/btcd/btcec/v2/ecdsa"
 	"github.com/btcsuite/btcd/btcec/v2/schnorr"
@@ -81,12 +81,12 @@ func (build *TransactionBuilder) AddOutput(address string, amount string) {
 func (build *TransactionBuilder) checkChangeValue() bool {
 	inSum := int64(0)
 	for _, input := range build.inputs {
-		inSum += util.ConvertToBigInt(input.value).Int64()
+		inSum += util2.ConvertToBigInt(input.value).Int64()
 	}
 
 	outSum := int64(0)
 	for _, output := range build.outputs {
-		outSum += util.ConvertToBigInt(output.amount).Int64()
+		outSum += util2.ConvertToBigInt(output.amount).Int64()
 	}
 
 	change := inSum - outSum
@@ -197,7 +197,7 @@ func (build *TransactionBuilder) Build() (string, error) {
 		prevPkScripts = append(prevPkScripts, pkScript)
 
 		prevOuts.AddPrevOut(*outPoint, &wire.TxOut{
-			Value:    util.ConvertToBigInt(input.value).Int64(),
+			Value:    util2.ConvertToBigInt(input.value).Int64(),
 			PkScript: pkScript,
 		})
 	}
@@ -208,13 +208,13 @@ func (build *TransactionBuilder) Build() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		txOut := wire.NewTxOut(util.ConvertToBigInt(output.amount).Int64(), script)
+		txOut := wire.NewTxOut(util2.ConvertToBigInt(output.amount).Int64(), script)
 		tx.TxOut = append(tx.TxOut, txOut)
 	}
 
 	for i := 0; i < len(build.inputs); i++ {
 		input := build.inputs[i]
-		privateBytes := util.RemoveZeroHex(input.privateKeyHex)
+		privateBytes := util2.RemoveZeroHex(input.privateKeyHex)
 		prvKey, pubKey := btcec.PrivKeyFromBytes(privateBytes)
 
 		oneIndex := strings.LastIndexByte(input.address, '1')
@@ -223,7 +223,7 @@ func (build *TransactionBuilder) Build() (string, error) {
 			return "", err
 		}
 		isSegWit := oneIndex > 1 && strings.ToLower(input.address[:oneIndex]) == build.params.Bech32HRPSegwit
-		amount := util.ConvertToBigInt(input.value).Int64()
+		amount := util2.ConvertToBigInt(input.value).Int64()
 		// the address is taproot address
 		if isTaproot {
 			//create taproot script
