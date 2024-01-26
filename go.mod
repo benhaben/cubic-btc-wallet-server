@@ -1,4 +1,4 @@
-module b2-btc-wallet-server
+module github.com/benhaben/cubic-btc-wallet-server
 
 go 1.21
 
@@ -8,13 +8,14 @@ require (
 	github.com/btcsuite/btcd/btcutil v1.1.5
 	github.com/btcsuite/btcd/btcutil/psbt v1.1.9
 	github.com/btcsuite/btcd/chaincfg/chainhash v1.1.0
-	github.com/gin-gonic/gin v1.9.1
 	github.com/caarlos0/env/v6 v6.10.1
+	github.com/gin-gonic/gin v1.9.1
 	github.com/spf13/viper v1.18.2
 	github.com/stretchr/testify v1.8.4
 	go.uber.org/zap v1.26.0
-    gorm.io/driver/postgres v1.5.4
-    gorm.io/gorm v1.25.5
+	golang.org/x/crypto v0.18.0
+	gorm.io/driver/postgres v1.5.4
+	gorm.io/gorm v1.25.5
 )
 
 require (
@@ -42,7 +43,6 @@ require (
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.12 // indirect
 	golang.org/x/arch v0.7.0 // indirect
-	golang.org/x/crypto v0.18.0 // indirect
 	golang.org/x/net v0.20.0 // indirect
 	golang.org/x/sys v0.16.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
