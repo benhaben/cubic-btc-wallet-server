@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/hex"
 	"fmt"
-	"github.com/CubicGames/cubic-btc-wallet-server/bitcoin/btcapi/mempool"
+	"github.com/CubicGames/cubic-btc-wallet-server/brc/btcapi/mempool"
 	"github.com/btcsuite/btcd/btcec/v2"
 	"github.com/btcsuite/btcd/btcec/v2/schnorr"
 	"github.com/btcsuite/btcd/btcutil"

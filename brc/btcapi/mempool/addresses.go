@@ -3,7 +3,7 @@ package mempool
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/CubicGames/cubic-btc-wallet-server/bitcoin/btcapi"
+	"github.com/CubicGames/cubic-btc-wallet-server/brc/btcapi"
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/wire"

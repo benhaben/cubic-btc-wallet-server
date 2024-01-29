@@ -1,7 +1,7 @@
 package mempool
 
 import (
-	"github.com/CubicGames/cubic-btc-wallet-server/bitcoin/btcapi"
+	"github.com/CubicGames/cubic-btc-wallet-server/brc/btcapi"
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/wire"
 	"io"

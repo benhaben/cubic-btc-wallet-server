@@ -15,7 +15,7 @@ The SDK not only support Bitcoin, it also supports following chains:
 To obtain the latest version, simply require the project using :
 
 ```shell
-go get -u github.com/okx/go-wallet-sdk/coins/bitcoin
+go get -u github.com/okx/go-wallet-sdk/coins/brc
 ```
 
 ## Usage

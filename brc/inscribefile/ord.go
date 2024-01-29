@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"encoding/hex"
 	"fmt"
-	"github.com/CubicGames/cubic-btc-wallet-server/bitcoin/btcapi"
-	extRpcClient "github.com/CubicGames/cubic-btc-wallet-server/bitcoin/rpcclient"
+	"github.com/CubicGames/cubic-btc-wallet-server/brc/btcapi"
+	extRpcClient "github.com/CubicGames/cubic-btc-wallet-server/brc/rpcclient"
 	"github.com/btcsuite/btcd/blockchain"
 	"github.com/btcsuite/btcd/btcec/v2"
 	"github.com/btcsuite/btcd/btcec/v2/schnorr"
@@ -71,19 +71,6 @@ const (
 
 	MaxStandardTxWeight = blockchain.MaxBlockWeight / 10
 )
-
-func NewInscriptionTool(net *chaincfg.Params, rpcclient *rpcclient.Client, request *InscriptionRequest) (*InscriptionTool, error) {
-	tool := &InscriptionTool{
-		net: net,
-		client: &blockchainClient{
-			rpcClient: rpcclient,
-		},
-		commitTxPrevOutputFetcher: txscript.NewMultiPrevOutFetcher(nil),
-		txCtxDataList:             make([]*inscriptionTxCtxData, len(request.DataList)),
-		revealTxPrevOutputFetcher: txscript.NewMultiPrevOutFetcher(nil),
-	}
-	return tool, tool._initTool(net, request)
-}
 
 func NewInscriptionToolWithBtcApiClient(net *chaincfg.Params, btcApiClient btcapi.BTCAPIClient, request *InscriptionRequest) (*InscriptionTool, error) {
 	if len(request.CommitTxPrivateKeyList) != len(request.CommitTxOutPointList) {
@@ -415,6 +402,7 @@ func (tool *InscriptionTool) signCommitTx() error {
 		witnessList := make([]wire.TxWitness, len(tool.commitTx.TxIn))
 		for i := range tool.commitTx.TxIn {
 			txOut := tool.commitTxPrevOutputFetcher.FetchPrevOutput(tool.commitTx.TxIn[i].PreviousOutPoint)
+			//TODO: IsPayToTaproot, IsPayToPubKeyHash
 			witness, err := txscript.TaprootWitnessSignature(tool.commitTx, txscript.NewTxSigHashes(tool.commitTx, tool.commitTxPrevOutputFetcher),
 				i, txOut.Value, txOut.PkScript, txscript.SigHashDefault, tool.commitTxPrivateKeyList[i])
 			if err != nil {

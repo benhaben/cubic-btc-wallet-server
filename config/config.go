@@ -24,21 +24,21 @@ type Config struct {
 	DatabaseConnMaxLifetime int    `mapstructure:"database-conn-max-lifetime" env:"INDEXER_DATABASE_CONN_MAX_LIFETIME" envDefault:"3600"`
 }
 
-// BitconConfig defines the bitcoin config
+// BitconConfig defines the brc config
 type BitconConfig struct {
-	// NetworkName defines the bitcoin network name
+	// NetworkName defines the brc network name
 	NetworkName string `mapstructure:"network-name" env:"BITCOIN_NETWORK_NAME"`
-	// RPCHost defines the bitcoin rpc host
+	// RPCHost defines the brc rpc host
 	RPCHost string `mapstructure:"rpc-host" env:"BITCOIN_RPC_HOST"`
-	// RPCPort defines the bitcoin rpc port
+	// RPCPort defines the brc rpc port
 	RPCPort string `mapstructure:"rpc-port" env:"BITCOIN_RPC_PORT"`
-	// RPCUser defines the bitcoin rpc user
+	// RPCUser defines the brc rpc user
 	RPCUser string `mapstructure:"rpc-user" env:"BITCOIN_RPC_USER"`
-	// RPCPass defines the bitcoin rpc password
+	// RPCPass defines the brc rpc password
 	RPCPass string `mapstructure:"rpc-pass" env:"BITCOIN_RPC_PASS"`
-	// DisableTLS defines the bitcoin whether tls is required
+	// DisableTLS defines the brc whether tls is required
 	DisableTLS bool `mapstructure:"disable-tls" env:"BITCOIN_DISABLE_TLS" envDefault:"true"`
-	// WalletName defines the bitcoin wallet name
+	// WalletName defines the brc wallet name
 	WalletName string `mapstructure:"wallet-name" env:"BITCOIN_WALLET_NAME"`
 	// EnableIndexer defines whether to enable the indexer
 	EnableIndexer bool `mapstructure:"enable-indexer" env:"BITCOIN_ENABLE_INDEXER"`
@@ -46,7 +46,7 @@ type BitconConfig struct {
 	IndexerListenAddress string `mapstructure:"indexer-listen-address" env:"BITCOIN_INDEXER_LISTEN_ADDRESS"`
 	// Bridge defines the bridge config
 	Bridge BridgeConfig `mapstructure:"bridge"`
-	// Fee defines the bitcoin tx fee
+	// Fee defines the brc tx fee
 	Fee int64 `mapstructure:"fee" env:"BITCOIN_FEE"`
 	// Evm defines the evm config
 	Evm EvmConfig `mapstructure:"evm"`
@@ -79,7 +79,7 @@ type EvmConfig struct {
 }
 
 const (
-	BitcoinConfigFileName  = "bitcoin.toml"
+	BitcoinConfigFileName  = "brc.toml"
 	AppConfigFileName      = "indexer.toml"
 	BitcoinConfigEnvPrefix = "BITCOIN"
 	AppConfigEnvPrefix     = "APP"
