@@ -25,6 +25,7 @@ func TestNewTapRootAddress(t *testing.T) {
 }
 
 func TestNewTapRootAddressWithScript(t *testing.T) {
+	//tb1pflq6z6mdduna235j3k3wn8tu6r39d4lc5celw9c7tfu6agp2yxvqfpyzqh
 	privKey, _ := btcec.PrivKeyFromBytes(util.RemoveZeroHex("1790962db820729606cd7b255ace1ac5ebb129ac8e9b2d8534d022194ab25b37"))
 	wif, _ := btcutil.NewWIF(privKey, &chaincfg.TestNet3Params, true)
 	t.Log(wif)
@@ -42,6 +43,7 @@ func TestNewTapRootAddressWithScript(t *testing.T) {
 }
 
 func TestNewTapRootAddressWithScriptWithPubKey(t *testing.T) {
+	//tb1pp6v2zc4dfxrx0c6xmh340u9w958w2mklyfhz5ufrf7t8m6wunj2q4uvfj0
 	privKey, _ := btcec.PrivKeyFromBytes(util.RemoveZeroHex("604a9c5b807b8ef912e7a02321a66be93df4e13c4c0ef4e3ad6d8fc590e4ccd7"))
 	pubKeyBytes := schnorr.SerializePubKey(privKey.PubKey())
 	script, err := CreateInscriptionScriptWithPubKey(
