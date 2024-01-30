@@ -123,6 +123,7 @@ func (tool *InscriptionTool) _initTool(net *chaincfg.Params, request *Inscriptio
 }
 
 func createInscriptionTxCtxData(net *chaincfg.Params, data InscriptionData) (*inscriptionTxCtxData, error) {
+	//TODO: use use public key
 	privateKey, err := btcec.NewPrivateKey()
 	if err != nil {
 		return nil, err
