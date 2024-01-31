@@ -23,7 +23,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error getting current working directory, %v", err)
 	}
-	filePath := fmt.Sprintf("%s/images/0001.png", workingDir)
+	filePath := fmt.Sprintf("%s/images/0004.png", workingDir)
 	// if file size too max will return sendrawtransaction RPC error: {"code":-26,"message":"tx-size"}
 
 	fileContent, err := os.ReadFile(filePath)
@@ -35,12 +35,12 @@ func main() {
 	log.Printf("file contentType %s", contentType)
 
 	//tb1pflq6z6mdduna235j3k3wn8tu6r39d4lc5celw9c7tfu6agp2yxvqfpyzqh
-	utxoPrivateKeyHex := "8f89a8d5e05f117af4f91300ce643eb174ef763263f16939771a62b698035499"
-	destination := "tb1pfkd72zchxehrnd3jnxsq80fuqjjqfhh3pfgeh4zchfdtj956dz8qfrs9af"
+	//utxoPrivateKeyHex := "8f89a8d5e05f117af4f91300ce643eb174ef763263f16939771a62b698035499"
+	utxoPrivateKeyHex := "58c467cf4f03ad3c73e582e829b04a71fd4bb80517a9d4806f7829b93da1e308"
+	destination := "tb1p8fekvp3f5s92rjl539nmn7wkl8xa4xh0h4n5lh9r8gdnqeyjn00q5v883t"
 
 	commitTxOutPointList := make([]*wire.OutPoint, 0)
 	commitTxPrivateKeyList := make([]*btcec.PrivateKey, 0)
-
 	{
 		utxoPrivateKeyBytes, err := hex.DecodeString(utxoPrivateKeyHex)
 		if err != nil {
@@ -60,8 +60,10 @@ func main() {
 		}
 
 		for i := range unspentList {
-			commitTxOutPointList = append(commitTxOutPointList, unspentList[i].Outpoint)
-			commitTxPrivateKeyList = append(commitTxPrivateKeyList, utxoPrivateKey)
+			if "438f91f0f6f4326fe642351b9c84000f75536a7feb941b5a52ffbef1a5df0498" == unspentList[i].Outpoint.Hash.String() {
+				commitTxOutPointList = append(commitTxOutPointList, unspentList[i].Outpoint)
+				commitTxPrivateKeyList = append(commitTxPrivateKeyList, utxoPrivateKey)
+			}
 		}
 	}
 
@@ -77,7 +79,7 @@ func main() {
 				Destination: destination,
 			},
 		},
-		SingleRevealTxOnly: false,
+		SingleRevealTxOnly: true,
 	}
 
 	tool, err := NewInscriptionToolWithBtcApiClient(netParams, btcApiClient, &request)
