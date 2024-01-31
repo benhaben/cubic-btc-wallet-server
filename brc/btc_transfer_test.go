@@ -8,7 +8,10 @@ import (
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/txscript"
+	bitcoin "github.com/okx/go-wallet-sdk/coins/bitcoin"
+	"github.com/stretchr/testify/assert"
 	"log"
+	"testing"
 )
 
 ///01/31 14:16:59 commitTxHash, 2efdd963a14f7e77b1b80eeeb426a8b634e6eb4ce3438c00afb31382475ac850
@@ -37,7 +40,9 @@ func main() {
 	btcApiClient := mempool.NewClient(netParams)
 
 	utxoPrivateKeyHex := "8f89a8d5e05f117af4f91300ce643eb174ef763263f16939771a62b698035499"
+	//toAddress := "tb1pgd2asxalejy3muv0uw8eeryaejmlj5tpwydpevtsuqcfnumk737qrv7pqu"
 
+	//var outpont *wire.OutPoint
 	{
 		utxoPrivateKeyBytes, err := hex.DecodeString(utxoPrivateKeyHex)
 		if err != nil {
@@ -59,12 +64,44 @@ func main() {
 
 		// get one inscription
 		for i := range unspentList {
-			if unspentList[i].Output.Value < 1000 {
-				log.Printf(unspentList[i].Outpoint.Hash.String())
+			hash := unspentList[i].Outpoint.Hash.String()
+			log.Printf(hash)
+			if hash == "dafdf9b12d76fd9eb1502d91730892311a5c48bd15eed267137943e9aeafc5ee" {
+				//outpont = unspentList[i].Outpoint
 			}
 		}
 	}
-	// Prepare the transaction inputs and outputs
-	// Replace the addresses and amounts with your own values
+
+}
+func TestBtcTx(t *testing.T) {
+	utxoPrivateKeyHex := "cSPij8GwFNvKfj4J9Zf9ixDa67ZzWfo9cTypyDMPEKjuTaC1yLJX"
+	destination := "tb1pfkd72zchxehrnd3jnxsq80fuqjjqfhh3pfgeh4zchfdtj956dz8qfrs9af"
+	//wif, err := btcutil.DecodeWIF(utxoPrivateKeyHex)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//txBuild := bitcoin.NewTxBuild(1, &chaincfg.TestNet3Params)
+	//txBuild.AddInput("dafdf9b12d76fd9eb1502d91730892311a5c48bd15eed267137943e9aeafc5ee", 0, utxoPrivateKeyHex, "", "", 0) // replace to your private key
+	//txBuild.AddOutput(toAddress, 0)
+	//txHex, err := txBuild.SingleBuild()
+	//require.Nil(t, err)
+	//t.Log(txHex)
+
+	netParams := &chaincfg.TestNet3Params
+	btcApiClient := mempool.NewClient(netParams)
+	txBuild := bitcoin.NewTxBuild(1, &chaincfg.TestNet3Params)
+	txBuild.AddInput2("dafdf9b12d76fd9eb1502d91730892311a5c48bd15eed267137943e9aeafc5ee", 0, utxoPrivateKeyHex, destination, 546)
+	txBuild.AddOutput(destination, 300)
+	txBuild.AddOutput(destination, 300)
+
+	tx, err := txBuild.Build()
+	assert.Nil(t, err)
+	txHex, err := bitcoin.GetTxHex(tx)
+	t.Log(txHex)
+	_, err = btcApiClient.SendRawTransaction(txHex)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
 
 }

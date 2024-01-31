@@ -41,3 +41,16 @@ func (c *MempoolClient) BroadcastTx(tx *wire.MsgTx) (*chainhash.Hash, error) {
 	}
 	return txHash, nil
 }
+func (c *MempoolClient) SendRawTransaction(tx string) (*chainhash.Hash, error) {
+
+	res, err := c.request(http.MethodPost, "/tx", strings.NewReader(tx))
+	if err != nil {
+		return nil, err
+	}
+
+	txHash, err := chainhash.NewHashFromStr(string(res))
+	if err != nil {
+		return nil, errors.Wrap(err, fmt.Sprintf("failed to parse tx hash, %s", string(res)))
+	}
+	return txHash, nil
+}
