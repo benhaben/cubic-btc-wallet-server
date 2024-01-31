@@ -96,7 +96,7 @@ func (tool *InscriptionTool) _initTool(net *chaincfg.Params, request *Inscriptio
 	tool.txCtxDataList = make([]*inscriptionTxCtxData, len(request.DataList))
 	destinations := make([]string, len(request.DataList))
 	for i := 0; i < len(request.DataList); i++ {
-		txCtxData, err := createInscriptionTxCtxData(net, request.DataList[i])
+		txCtxData, err := createInscriptionTxCtxData(net, request, i)
 		if err != nil {
 			return err
 		}
@@ -122,12 +122,10 @@ func (tool *InscriptionTool) _initTool(net *chaincfg.Params, request *Inscriptio
 	return err
 }
 
-func createInscriptionTxCtxData(net *chaincfg.Params, data InscriptionData) (*inscriptionTxCtxData, error) {
-	//TODO: use use public key
-	privateKey, err := btcec.NewPrivateKey()
-	if err != nil {
-		return nil, err
-	}
+func createInscriptionTxCtxData(net *chaincfg.Params, reuqest *InscriptionRequest, i int) (*inscriptionTxCtxData, error) {
+	data := reuqest.DataList[i]
+	privateKey := reuqest.CommitTxPrivateKeyList[i]
+
 	inscriptionBuilder := txscript.NewScriptBuilder().
 		AddData(schnorr.SerializePubKey(privateKey.PubKey())).
 		AddOp(txscript.OP_CHECKSIG).

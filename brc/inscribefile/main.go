@@ -35,7 +35,7 @@ func main() {
 	log.Printf("file contentType %s", contentType)
 
 	//tb1pflq6z6mdduna235j3k3wn8tu6r39d4lc5celw9c7tfu6agp2yxvqfpyzqh
-	utxoPrivateKeyHex := "1790962db820729606cd7b255ace1ac5ebb129ac8e9b2d8534d022194ab25b37"
+	utxoPrivateKeyHex := "8f89a8d5e05f117af4f91300ce643eb174ef763263f16939771a62b698035499"
 	destination := "tb1pfkd72zchxehrnd3jnxsq80fuqjjqfhh3pfgeh4zchfdtj956dz8qfrs9af"
 
 	commitTxOutPointList := make([]*wire.OutPoint, 0)
