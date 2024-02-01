@@ -1,4 +1,4 @@
-package mempool
+package client
 
 import (
 	"github.com/CubicGames/cubic-btc-wallet-server/brc/btcapi"
@@ -21,7 +21,7 @@ func NewClient(netParams *chaincfg.Params) *MempoolClient {
 	} else if netParams.Net == chaincfg.SigNetParams.Net {
 		baseURL = "https://mempool.space/signet/api"
 	} else {
-		log.Fatal("mempool don't support other netParams")
+		log.Fatal("client don't support other netParams")
 	}
 	return &MempoolClient{
 		baseURL: baseURL,

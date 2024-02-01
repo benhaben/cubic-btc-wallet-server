@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/hex"
 	"fmt"
-	"github.com/CubicGames/cubic-btc-wallet-server/brc/btcapi/mempool"
+	"github.com/CubicGames/cubic-btc-wallet-server/brc/btcapi/client"
 	"github.com/btcsuite/btcd/btcec/v2"
 	"github.com/btcsuite/btcd/btcec/v2/schnorr"
 	"github.com/btcsuite/btcd/btcutil"
@@ -17,7 +17,7 @@ import (
 
 func main() {
 	netParams := &chaincfg.TestNet3Params
-	btcApiClient := mempool.NewClient(netParams)
+	btcApiClient := client.NewClient(netParams)
 
 	workingDir, err := os.Getwd()
 	if err != nil {

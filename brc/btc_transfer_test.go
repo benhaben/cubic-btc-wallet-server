@@ -3,11 +3,12 @@ package main
 import (
 	"encoding/hex"
 	"fmt"
-	"github.com/CubicGames/cubic-btc-wallet-server/brc/btcapi/mempool"
+	"github.com/CubicGames/cubic-btc-wallet-server/brc/btcapi/client"
 	"github.com/btcsuite/btcd/btcec/v2"
 	"github.com/btcsuite/btcd/btcec/v2/schnorr"
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/chaincfg"
+	"github.com/btcsuite/btcd/mempool"
 	"github.com/btcsuite/btcd/txscript"
 	bitcoin "github.com/okx/go-wallet-sdk/coins/bitcoin"
 	"github.com/stretchr/testify/assert"
@@ -62,7 +63,7 @@ import (
 
 func TestBtcTx1(t *testing.T) {
 	netParams := &chaincfg.TestNet3Params
-	btcApiClient := mempool.NewClient(netParams)
+	btcApiClient := client.NewClient(netParams)
 
 	utxoPrivateKeyHex := "58c467cf4f03ad3c73e582e829b04a71fd4bb80517a9d4806f7829b93da1e308"
 	//toAddress := "tb1pgd2asxalejy3muv0uw8eeryaejmlj5tpwydpevtsuqcfnumk737qrv7pqu"
@@ -100,29 +101,20 @@ func TestBtcTx1(t *testing.T) {
 	}
 }
 func TestBtcTx(t *testing.T) {
-	utxoPrivateKeyHex := "cQZFf1boNVxjpRvpPNxELsUK1kh8oZt4Ax6JztPPy6ejhd7uoFh3"
-	destination := "tb1q078xsrxh5m7kkh0u2urkegja7kve9r5qm9vegk"
-	sender := "tb1p8fekvp3f5s92rjl539nmn7wkl8xa4xh0h4n5lh9r8gdnqeyjn00q5v883t"
+	utxoPrivateKeyHex := "cP9qxZm4pxn7FhuR38y9pML4EWV4mLNQb1BQ8K8epFaDh3GCQoK2"
+	destination := "tb1pv5yvehnrkksmn6rn309ygcqvj4vdc4jfdvs4gg26wxf5qpmaku5qznl46t"
+	sender := "tb1pv5yvehnrkksmn6rn309ygcqvj4vdc4jfdvs4gg26wxf5qpmaku5qznl46t"
 	wif, err := btcutil.DecodeWIF(utxoPrivateKeyHex)
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//txBuild := bitcoin.NewTxBuild(1, &chaincfg.TestNet3Params)
-	//txBuild.AddInput("dafdf9b12d76fd9eb1502d91730892311a5c48bd15eed267137943e9aeafc5ee", 0, utxoPrivateKeyHex, "", "", 0) // replace to your private key
-	//txBuild.AddOutput(toAddress, 0)
-	//txHex, err := txBuild.SingleBuild()
-	//require.Nil(t, err)
-	//t.Log(txHex)
 
 	netParams := &chaincfg.TestNet3Params
-	btcApiClient := mempool.NewClient(netParams)
+	btcApiClient := client.NewClient(netParams)
 	txBuild := bitcoin.NewTxBuild(1, &chaincfg.TestNet3Params)
 	// taproot_keypath address
-	txBuild = bitcoin.NewTxBuild(1, &chaincfg.TestNet3Params)
-	txBuild.AddInput2("fbc3ce8ef5b86f8fd05c9c3c137767f05818322bfa0b6f882e353835a4b510f2", 0, wif.String(), sender, 500)
-	txBuild.AddInput2("9c9aa87715f33ff83cff861d8bffbb20bfc06c38dd0cbc9d4dee929dfc91c14c", 0, wif.String(), sender, 98199)
-	txBuild.AddOutput(destination, 500)
-	txBuild.AddOutput(sender, 97998)
+	txBuild.AddInput2("93f5efc51c9ef18583df9f6df14420a850dd22ce5296b20285121c3204e7f8ac", 2, wif.String(), sender, 100000)
+	//txBuild.AddInput2("9c9aa87715f33ff83cff861d8bffbb20bfc06c38dd0cbc9d4dee929dfc91c14c", 0, wif.String(), sender, 98199)
+	txBuild.AddOutput(destination, 50000)
+	txBuild.AddOutput(destination, 45000)
+
 	tx, err := txBuild.Build()
 	assert.Nil(t, err)
 	txHex, err := bitcoin.GetTxHex(tx)
@@ -142,4 +134,35 @@ func TestParserScript(t *testing.T) {
 	}
 	utf8Str := string(bytes)
 	fmt.Println(utf8Str)
+}
+
+func TestEvaluateFee(t *testing.T) {
+
+	// 创建交易
+	utxoPrivateKeyHex := "cP9qxZm4pxn7FhuR38y9pML4EWV4mLNQb1BQ8K8epFaDh3GCQoK2"
+	destination := "tb1pv5yvehnrkksmn6rn309ygcqvj4vdc4jfdvs4gg26wxf5qpmaku5qznl46t"
+	sender := "tb1pv5yvehnrkksmn6rn309ygcqvj4vdc4jfdvs4gg26wxf5qpmaku5qznl46t"
+	txBuild := bitcoin.NewTxBuild(1, &chaincfg.TestNet3Params)
+	// taproot_keypath address
+	txBuild.AddInput2("93f5efc51c9ef18583df9f6df14420a850dd22ce5296b20285121c3204e7f8ac", 2, utxoPrivateKeyHex, sender, 100000)
+	//txBuild.AddInput2("9c9aa87715f33ff83cff861d8bffbb20bfc06c38dd0cbc9d4dee929dfc91c14c", 0, wif.String(), sender, 98199)
+	txBuild.AddOutput(destination, 50000)
+	txBuild.AddOutput(destination, 45000)
+
+	tx, _ := txBuild.Build()
+	// 计算大小
+	txSize := tx.SerializeSize()
+
+	// 估算手续费率
+	feeRate := 2.0
+	fee := btcutil.Amount(mempool.GetTxVirtualSize(btcutil.NewTx(tx))) * btcutil.Amount(feeRate)
+
+	fee1 := feeRate * float64(txSize)
+
+	// 计算手续费
+	fmt.Printf("交易大小: %d 字节\n", txSize)
+	fmt.Printf("手续费率: %.2f sat/字节\n", feeRate)
+	fmt.Printf("估算手续费: %v sat\n", fee)
+	fmt.Printf("估算手续费: %.2f sat\n", fee1)
+
 }

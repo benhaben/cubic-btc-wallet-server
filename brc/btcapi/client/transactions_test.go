@@ -1,4 +1,4 @@
-package mempool
+package client
 
 import (
 	"github.com/btcsuite/btcd/chaincfg"
