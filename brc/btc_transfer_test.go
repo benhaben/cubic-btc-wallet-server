@@ -153,7 +153,7 @@ func TestEvaluateFee(t *testing.T) {
 	// 计算大小
 	txSize := tx.SerializeSize()
 
-	// 估算手续费率
+	// 估算手续费率 curl -sSL "https://mempool.space/api/v1/fees/recommended"
 	feeRate := 2.0
 	fee := btcutil.Amount(mempool.GetTxVirtualSize(btcutil.NewTx(tx))) * btcutil.Amount(feeRate)
 
