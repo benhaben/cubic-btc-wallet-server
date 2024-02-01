@@ -97,11 +97,10 @@ func TestBtcTx1(t *testing.T) {
 			log.Printf("value=%v, script=%v", value, script)
 		}
 	}
-
 }
 func TestBtcTx(t *testing.T) {
 	utxoPrivateKeyHex := "cQZFf1boNVxjpRvpPNxELsUK1kh8oZt4Ax6JztPPy6ejhd7uoFh3"
-	destination := "tb1pfkd72zchxehrnd3jnxsq80fuqjjqfhh3pfgeh4zchfdtj956dz8qfrs9af"
+	destination := "tb1q078xsrxh5m7kkh0u2urkegja7kve9r5qm9vegk"
 	sender := "tb1p8fekvp3f5s92rjl539nmn7wkl8xa4xh0h4n5lh9r8gdnqeyjn00q5v883t"
 	wif, err := btcutil.DecodeWIF(utxoPrivateKeyHex)
 	//if err != nil {
@@ -119,10 +118,10 @@ func TestBtcTx(t *testing.T) {
 	txBuild := bitcoin.NewTxBuild(1, &chaincfg.TestNet3Params)
 	// taproot_keypath address
 	txBuild = bitcoin.NewTxBuild(1, &chaincfg.TestNet3Params)
-	txBuild.AddInput2("39b1f0836413884fa649199ebb980245165e3f88094717dc32cc4cc13b76358c", 0, wif.String(), sender, 500)
-	txBuild.AddInput2("969ee8972442b1fed111a06b4ba6b1893fa50d00762257f9f3b0002084a023ea", 0, wif.String(), sender, 100000)
-	txBuild.AddOutput(sender, 99500)
+	txBuild.AddInput2("fbc3ce8ef5b86f8fd05c9c3c137767f05818322bfa0b6f882e353835a4b510f2", 0, wif.String(), sender, 500)
+	txBuild.AddInput2("9c9aa87715f33ff83cff861d8bffbb20bfc06c38dd0cbc9d4dee929dfc91c14c", 0, wif.String(), sender, 98199)
 	txBuild.AddOutput(destination, 500)
+	txBuild.AddOutput(sender, 97998)
 	tx, err := txBuild.Build()
 	assert.Nil(t, err)
 	txHex, err := bitcoin.GetTxHex(tx)
