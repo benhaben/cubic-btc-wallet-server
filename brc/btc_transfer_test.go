@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/hex"
+	"fmt"
 	"github.com/CubicGames/cubic-btc-wallet-server/brc/btcapi/mempool"
 	"github.com/btcsuite/btcd/btcec/v2"
 	"github.com/btcsuite/btcd/btcec/v2/schnorr"
@@ -131,4 +132,14 @@ func TestBtcTx(t *testing.T) {
 	assert.Nil(t, err)
 	log.Printf(transaction.String())
 
+}
+
+func TestParserScript(t *testing.T) {
+	scriptHex := "7b2270223a226272632d3230222c226f70223a227472616e73666572222c227469636b223a226f726469222c22616d74223a2237227d"
+	bytes, err := hex.DecodeString(scriptHex)
+	if err != nil {
+		// handle error
+	}
+	utf8Str := string(bytes)
+	fmt.Println(utf8Str)
 }
