@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
+	"github.com/btcsuite/btcd/btcec/v2/ecdsa"
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/decred/dcrd/dcrec/secp256k1/v4/schnorr"
@@ -84,17 +85,18 @@ func TestExampleSignature_Verify(t *testing.T) {
 	}
 
 	signatureBytes, err := base64.StdEncoding.DecodeString("GxrVlzUTwz3LPaFkfPtbzFKh0fchOGac3RA3PDrFtOfcaQ9gn7r3/wxfWe4xCzX+0ZCBhfYetWBuSads43E52fA=")
+
 	fmt.Println(signatureBytes) // Output: 48656c6c6f
-	signature, err := schnorr.ParseSignature([]byte(signatureBytes))
+	parseSignature, err := ecdsa.ParseSignature([]byte("304402201ad5973513c33dcb3da1647cfb5bcc52a1d1f72138669cdd10373c3ac5b4e7dc0220690f609fbaf7ff0c5f59ee310b35fed1908185f61eb5606e49a76ce37139d9f0"))
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
 	// Verify the signature for the message using the public key.
-	verified := signature.Verify(hash[:], internalKey)
+	verified := parseSignature.Verify(hash[:], internalKey)
 	fmt.Println("Signature Verified?", verified)
-
+	assert.True(t, verified)
 	// Output:
 	// Signature Verified? true
 }
