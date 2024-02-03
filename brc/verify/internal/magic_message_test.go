@@ -1,11 +1,10 @@
 package internal_test
 
 import (
+	"github.com/CubicGames/cubic-btc-wallet-server/brc/verify/internal"
 	"testing"
 
 	"github.com/stretchr/testify/require"
-
-	"github.com/bitonicnl/verify-signed-message/internal"
 )
 
 func TestCreateMagicMessage(t *testing.T) {

@@ -3,6 +3,7 @@ package internal_test
 import (
 	"crypto/rand"
 	"errors"
+	"github.com/CubicGames/cubic-btc-wallet-server/brc/verify/internal"
 	"testing"
 
 	"github.com/btcsuite/btcd/btcec/v2"
@@ -12,8 +13,6 @@ import (
 	"github.com/decred/dcrd/dcrec/secp256k1/v4"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
-
-	"github.com/bitonicnl/verify-signed-message/internal"
 )
 
 // Hash for 1DAag8qiPLHh6hMFVu9qJQm9ro1HtwuyK5, used in this test.
