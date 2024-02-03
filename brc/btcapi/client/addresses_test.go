@@ -1,12 +1,13 @@
 package client
 
 import (
+	"crypto/sha256"
+	"encoding/base64"
 	"encoding/hex"
 	"fmt"
-	"github.com/btcsuite/btcd/btcec/v2/schnorr"
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/decred/dcrd/crypto/blake256"
+	"github.com/decred/dcrd/dcrec/secp256k1/v4/schnorr"
 	bitcoin "github.com/okx/go-wallet-sdk/coins/bitcoin"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -57,33 +58,41 @@ func TestPubKeyToAddr(t *testing.T) {
 // from raw bytes.
 func TestExampleSignature_Verify(t *testing.T) {
 	// Decode hex-encoded serialized public key.
-	pubKeyBytes, err := hex.DecodeString("032809768349c8293f896e4f17b82ba4f21edfaa6c28b356f396a6101ad0b9d9a6")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	pubKey, err := schnorr.ParsePubKey(pubKeyBytes)
+	pubKeyBytes, err := hex.DecodeString("03e89b066ce5d807289c22b511341bbe5ed70c7f236ae9e2d05ba740aec0af2ae3")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	// Decode hex-encoded serialized signature. this sign message is copied from wallet demo
-	sigBytes, err := hex.DecodeString("HD9l91NC7J+mhsMHRG6EW29iajNMFmXfb7BaRwxt2K1ITCo1YAi3FhucaF198FGYnLkv5VSCvL3/CizP4uA6Vfc=970603d8ccd2475b1ff66cfb3ce7e622c59383")
+	internalKey, err := schnorr.ParsePubKey(pubKeyBytes)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	signature, err := schnorr.ParseSignature(sigBytes)
+
+	message := "hello world~"
+
+	msgHash := fmt.Sprintf(
+		"%x",
+		sha256.Sum256([]byte(message)),
+	)
+
+	hash, hashDecodeError := hex.DecodeString(msgHash)
+	if hashDecodeError != nil {
+		fmt.Println(err)
+		return
+	}
+
+	signatureBytes, err := base64.StdEncoding.DecodeString("GxrVlzUTwz3LPaFkfPtbzFKh0fchOGac3RA3PDrFtOfcaQ9gn7r3/wxfWe4xCzX+0ZCBhfYetWBuSads43E52fA=")
+	fmt.Println(signatureBytes) // Output: 48656c6c6f
+	signature, err := schnorr.ParseSignature([]byte(signatureBytes))
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
 	// Verify the signature for the message using the public key.
-	message := "test message"
-	messageHash := blake256.Sum256([]byte(message))
-	verified := signature.Verify(messageHash[:], pubKey)
+	verified := signature.Verify(hash[:], internalKey)
 	fmt.Println("Signature Verified?", verified)
 
 	// Output:
